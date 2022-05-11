@@ -1,0 +1,180 @@
+--------------------------------------------USANDO GIT--------------------------------------------
+
+-Ao criar o arquivo que será monitorado pelo git, abra o git Bash
+
+Antes de qualquer interação com o git, você precisa informar quem é você para que ele armazene corretamente os dados do autor de cada uma das alterações no código. 
+>>git config --local user.name "Seu nome aqui"
+>>git config --local user.email "seu@email.aqui"
+
+-Vá até o diretorio que o arquivo se encontra
+
+-Para iniciar o Git no repositorio que futuramente será monitorado:
+>>git init
+
+-Para ter informaçoes do Git sobre esse arquivo:
+>>git status
+
+----------------------------------------------------------------------------------------------------------------------------------
+- Se houver arquivos nao monitorados, deve ser indicado ao git que passe a salvar as modificaçoes desses arquivos. Para isso:
+>>git add "nomedoarquivo" 
+por ex:
+>>git add index.html.
+
+OBS: Se houver mais de um arquivo a ser adicionado dentro do repositório, use "." no final do comando. O ponto adiciona todos os arquivos.
+Ex: >>git add .
+
+------------------------------------------------------------------------------------------------------------------------------------
+para validar se o comando deu certo, usar sempre:
+>>git status
+
+Provavelmente ja foram adicionadas as alteraçoes para serem salvas. Mas ainda nao foram salvas. É necessário dar o Commit.
+Para isso:
+>>git commit -m "Informe aqui a mensagem da alteraçao no seu codigo"
+
+O -m faz referencia á mensagem e dentros de aspas é informado o motivo da alteraçao.
+
+------------------------------------------------------------------------------------------------------------------------------------
+Após isto, é possível ver o que foi feito com:
+>>git status
+Provavelmente o git indicará que nao há nenhuma alteraçao feita.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+Após qualquer alteraçao na linha de código:
+>>git add nomedoarquivo.html
+>>git commit -m "qualAlteracaoFoifeita"
+
+Para ver histórico de alteraçoes:
+>>git log
+(mostra da alteraçao mais nova para a mais antiga)
+
+PARA VER OS LOGS DE FORMA RESUMIDA EM UMA UNICA LINHA:
+>>git log --oneline
+
+VER AS AUTERAÇOES FEITAS NO CODIGO DE MANEIRA MAIS DETALHADA
+>>git log -p
+
+------------------------------------------------------------------------------------------------------------------------------------
+Para que o Git ignore determinado arquivo:
+- Criar um arquivo dentro do diretorio do projeto com o nome:
+	-Pasta do projeto
+		- .gitignore
+
+Dentro do .gitignore coloque o nome do arquivo que vc quer que o git nao monitore.
+Ao dar o comando git status, o arquivo nao estará sendo monitorado. Mas o .gitignore deve ser adicionado ao monitoramento do git
+
+>>git add .gitignore
+>>git commit -m "Adicionando o .gitignore"
+
+------------------------------------------------------------------------------------------------------------------------------------
+Implementando repositório remoto
+Assim, teremos um local onde enviamos as alteraçoes e outras pessoas acessam a mesma.
+
+Em um diretório diferente ao do projeto, criar uma pasta de servidor com o nome que achar melhor.
+
+Farei dessa forma:
+>>cd ..
+>>mkdir servidorgit
+>>cd servidorgit/
+>>git init --bare 
+
+(bare indica que o repositorio é puro. Nao contem copia dos arquivos. Isso trás algumas facilidades e permite que esse repositorio seja configurado como remoto em outro.
+Com este comando nós criamos um repositório que não terá a working tree, ou seja, não conterá uma cópia dos nossos arquivos. Como o repositório servirá apenas como servidor, para que outros membros da equipe sincronizem seus trabalhos, poupamos espaço de armazenamento desta forma.
+
+Após esse comando, volte para o diretorio do projeto para adicionar como servidor remoto.
+
+------------------------------------------------------------------------------------------------------------------------------------
+No repositorio do projeto, adicione a pasta do servidor remoto como o exemplo abaixo:
+>>git remote add <nome> <url>
+
+O nome pode ser qualquer um que queira ser chamado essa pasta que terá a copia remota dos arquivos locais
+O endereço pode ser uma URL, um endereço de um outro computador em rede ou até mesmo uma pasta local.
+
+Nesse momento fiz desta forma:
+>>git remote add servidor C:/Users/Higor/Documents/FullStack/Alura/desenvolve2022/6semana/servidorgit
+
+Ao inserir:
+>>git remote
+O nome do servidor já deverá constar na lista de servidor remoto
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Para copiar um diretorio de um projeto ja existente onde vc fará parte:
+
+- Criar uma pasta com o seu nome ou nome do seu projeto e:
+>> git clone <url>/ <nomeDoProjeto>
+
+O dono do projeto, em sua pasta, deverá fazer um push do projeto indicando o servidor como parametro e incluir o master:
+>>git push <nomeDoServidorRemoto> master
+
+Para puxar para o nosso projeto o que foi empurrado para o servidorgit com o comando push, devemos dentro do diretorio do nosso projeto:
+>> git pull servidor master
+
+------------------------------------------------------------------------------------------------------------------------------------
+Quando criar um servidor remoto no github:
+
+Copiar o link do servidor e colar no git dentro do repositório do seu projeto
+Ex:
+>> git remote add origin https://github.com/weslleyhigor/alura-git.git
+
+Após isso, suba seu projeto para o servidor remoto no github como o seguinte comando em exemplo:
+>>git push origin master
+
+------------------------------------------------------------------------------------------------------------------------------------
+BRANCH SAO LINHAS DE DESENVOLVIMENTOS
+
+Se voce está na banch **master** e precisa criar uma nova linha de desenvolvimento:
+>>git branch <nomedalinha>
+Ex:
+>>git branch titulo
+
+Para sair da branch master e entrar na branh titulo use:
+>>git checkout titulo
+
+Se em determinado momento precisa voltar para a master:
+>>git checkout master
+
+Dessa forma, conseguimos navegar entre as branchs criadas.
+
+Para verificar as branchs existentes:
+>>git branch
+
+------------------------------------------------------------------------------------------------------------------------------------
+Para trazer o trabalho de outra branch e unir com a branch atual, conhecemos duas formas de fazer isso: merge e rebase.
+O merge junta os trabalhos e gera um merge commit. O rebase aplica os commits de outra branch na branch atual.
+>>git rebase <branch>
+>>git merge <branch>
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+HASH É A IDENTIFICAÇAO DO COMIT. É A SEQUENCIA DE CARACTERES E NUMEROS QUE FORMAM UM IDENTIFICADOR. 
+
+Desfazer um commit através da hash:
+>>git revert <identificador do commit que chamamos de hash>
+
+Com o git checkout nós desfazemos uma alteração que ainda não foi adicionada ao index ou stage, ou seja, antes do git add. 
+Depois de adicionar com git add, para desfazer uma alteração, precisamos tirá-la deste estado, com git reset.
+Agora, se já realizamos o commit, o comando git revert pode nos salvar.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+1) Execute o comando git log -p para ver, junto a cada commit, as alterações nele realizadas;
+2) Execute agora o comando git log --oneline;
+3) Execute o comando git diff {hash do commit de merge com lista}..{hash do último commit realizado};
+4) Execute alguma (pequena) alteração no index.html;
+5) Execute o comando git diff e veja esta alteração;
+6) Desfaça esta última alteração;
+7) Execute o comando git tag -a v0.1.0 para criar uma tag no seu código;
+8) Execute o comando git push origin v0.1.0 para enviar esta tag para o GitHub;
+9) Abra a página do repositório do GitHub que você criou e confira a aba de Releases.
+
+
+Nesta aula, aprendemos:
+
+    Que é possível visualizar quais alterações foram realizadas em cada arquivo, com o comando git diff;
+    Que, digitando apenas git diff, vemos as alterações em nossos arquivos que não foram adicionadas para commit (com git add);
+    Que é possível comparar as alterações entre duas branches com git diff <branch1>..<branch2>
+    Que é possível comparar as alterações feitas entre um commit e outro, através do comando git diff <commit1>..<commit2>;
+    Que o Git nos possibilita salvar marcos da nossa aplicação, como por exemplo, lançamento de versões, através do git tag;
+    Que o comando git tag -a é utilizado para gerar uma nova tag;
+    As Releases do GitHub, que são geradas para cada tag do Git criada em nosso repositório.
+
